@@ -1,4 +1,4 @@
-import { defineNuxtModule, addPlugin, createResolver, addImportsDir, addMiddleware } from '@nuxt/kit'
+import { defineNuxtModule, addPlugin, createResolver, addImportsDir, addRouteMiddleware } from '@nuxt/kit'
 import type { Resolver } from '@nuxt/kit'
 
 export interface ModuleOptions {
@@ -11,7 +11,7 @@ const addPlugins = (resolver: Resolver) => {
 }
 
 const addMiddlewares = (resolver: Resolver) => {
-  addMiddleware({
+  addRouteMiddleware({
     name: 'language-redirect',
     path: resolver.resolve('./runtime/middleware/languageRedirect.global'),
     global: true,
