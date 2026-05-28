@@ -5,9 +5,6 @@ export default defineNuxtPlugin({
   name: 'setuplanguages',
   parallel: false,
   async setup() {
-    const config = useRuntimeConfig()
-    if (!config.public.gothamutils.multiLang) return
-
     const { languages, currentLanguage, defaultLanguage } = useLanguage()
     const route = useRoute()
     const { fullslug } = route.params

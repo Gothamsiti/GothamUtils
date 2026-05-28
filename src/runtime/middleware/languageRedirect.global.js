@@ -1,8 +1,9 @@
 import { defineNuxtRouteMiddleware, useLanguage, navigateTo, useRuntimeConfig } from '#imports'
 
 export default defineNuxtRouteMiddleware((to) => {
-  const config = useRuntimeConfig()
-  if (!config.public.gothamutils.multiLang) return
+  const config = useRuntimeConfig();
+
+  if (!config.public.gothamutils.multiLang) return;
 
   const { defaultLanguage, languages } = useLanguage()
 
