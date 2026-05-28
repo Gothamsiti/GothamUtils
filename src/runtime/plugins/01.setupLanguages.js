@@ -1,10 +1,14 @@
-import { createError, useLanguage, useRoute } from '#imports'
+import { createError, useLanguage, useRoute, useRuntimeConfig } from '#imports'
 import { defineNuxtPlugin } from '#app'
 
 export default defineNuxtPlugin({
   name: 'setuplanguages',
   parallel: false,
   async setup() {
+    const { gothamutils } = useRuntimeConfig();
+
+    if(!gothamutils.multiLang) return;
+
     const { languages, currentLanguage, defaultLanguage } = useLanguage()
     const route = useRoute()
     const { fullslug } = route.params
