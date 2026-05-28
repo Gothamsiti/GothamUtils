@@ -2,7 +2,7 @@ import { defineNuxtModule, addPlugin, createResolver, addImportsDir } from '@nux
 import type { Resolver } from '@nuxt/kit'
 
 export interface ModuleOptions {
-  multiLang: boolean | undefined,
+  multiLang?: boolean
 }
 
 const addPlugins = (resolver: Resolver) => {
