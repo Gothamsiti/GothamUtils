@@ -1,6 +1,8 @@
 # Changelog
 
 
+## v1.0.38
+
 ## v1.0.37
 
 [compare changes](https://github.com/Gothamsiti/gothamstoryblok/compare/v1.0.36...v1.0.37)
