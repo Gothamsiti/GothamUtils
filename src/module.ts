@@ -1,7 +1,6 @@
 import { defineNuxtModule, addPlugin, createResolver, addImportsDir } from '@nuxt/kit'
 import type { Resolver } from '@nuxt/kit'
 
-// Module options TypeScript interface definition
 export interface ModuleOptions {
   multiLang: boolean | undefined,
 }
@@ -16,15 +15,15 @@ const addComposables = (resolver: Resolver) => {
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: 'gothamstoryblok',
-    configKey: 'gothamstoryblok',
+    name: 'gothamutils',
+    configKey: 'gothamutils',
   },
   defaults: {
     multiLang: false
   },
   setup(_options, _nuxt) {
-    _nuxt.options.runtimeConfig.gothamstoryblok = { ..._options }
-    _nuxt.options.runtimeConfig.public.gothamstoryblok = { storyblok: { version: _options.storyblok?.version || 'draft' } }
+    _nuxt.options.runtimeConfig.gothamutils = { ..._options }
+    _nuxt.options.runtimeConfig.public.gothamutils = { ..._options }
     const resolver = createResolver(import.meta.url)
     addPlugins(resolver)
     addComposables(resolver)
