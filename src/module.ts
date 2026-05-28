@@ -19,7 +19,7 @@ export default defineNuxtModule<ModuleOptions>({
     configKey: 'gothamutils',
   },
   defaults: {
-    multiLang: false
+    multiLang: false,
   },
   setup(_options, _nuxt) {
     _nuxt.options.runtimeConfig.gothamutils = { ..._options }

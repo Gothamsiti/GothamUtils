@@ -1,4 +1,4 @@
-import { createError, useLanguage, useRoute, useRuntimeConfig } from '#imports'
+import { createError, useLanguage, useRoute } from '#imports'
 import { defineNuxtPlugin } from '#app'
 
 export default defineNuxtPlugin({
