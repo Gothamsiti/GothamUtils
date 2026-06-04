@@ -39,9 +39,9 @@ export default defineNuxtModule<ModuleOptions>({
   defaults: {
     multiLang: false,
     analytics: undefined,
-    iubenda: undefined
+    iubenda: undefined,
   },
-  setup(_options:ModuleOptions, _nuxt) {
+  setup(_options: ModuleOptions, _nuxt) {
     _nuxt.options.runtimeConfig.gothamutils = { ..._options }
     _nuxt.options.runtimeConfig.public.gothamutils = {
       ..._options,

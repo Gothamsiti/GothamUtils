@@ -1,5 +1,5 @@
 import { defineNuxtPlugin } from '#app'
-import { useLanguage, useRoute, useRuntimeConfig, useStoryblokEditor } from '#imports'
+import { useLanguage, useStoryblokEditor } from '#imports'
 
 export default defineNuxtPlugin({
   async setup() {
