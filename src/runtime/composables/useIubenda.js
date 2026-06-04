@@ -3,7 +3,7 @@ import { useRuntimeConfig, useHead } from '#imports'
 export const useIubenda = () => {
   if (import.meta.server) {
     const config = useRuntimeConfig()
-    const { iubenda } = config.gothamstoryblok
+    const { iubenda } = config.gothamutils
     if (iubenda) {
       const { widgetId } = iubenda
       if (widgetId) {

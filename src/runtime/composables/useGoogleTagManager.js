@@ -3,7 +3,7 @@ import { useRuntimeConfig, useHead } from '#imports'
 export const useGoogleTagManager = () => {
   if (import.meta.server) {
     const config = useRuntimeConfig()
-    const { analytics } = config.gothamstoryblok
+    const { analytics } = config.gothamutils
     if (analytics) {
       const { trackingId } = analytics
       if (trackingId) {

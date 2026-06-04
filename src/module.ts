@@ -1,8 +1,17 @@
 import { defineNuxtModule, addPlugin, createResolver, addImportsDir, addRouteMiddleware } from '@nuxt/kit'
 import type { Resolver } from '@nuxt/kit'
 
+interface IubendaOptions {
+  widgetId?: undefined | string
+}
+interface AnalyticsOptions {
+  trackingId?: string | undefined
+  apiSecret?: string | undefined
+}
 export interface ModuleOptions {
   multiLang?: boolean
+  analytics?: AnalyticsOptions | undefined
+  iubenda?: IubendaOptions | undefined
 }
 
 const addPlugins = (resolver: Resolver) => {
@@ -29,10 +38,15 @@ export default defineNuxtModule<ModuleOptions>({
   },
   defaults: {
     multiLang: false,
+    analytics: undefined,
+    iubenda: undefined
   },
-  setup(_options, _nuxt) {
+  setup(_options:ModuleOptions, _nuxt) {
     _nuxt.options.runtimeConfig.gothamutils = { ..._options }
-    _nuxt.options.runtimeConfig.public.gothamutils = { ..._options }
+    _nuxt.options.runtimeConfig.public.gothamutils = {
+      ..._options,
+      analytics: _options.analytics ? { trackingId: _options.analytics.trackingId } : undefined,
+    }
 
     const resolver = createResolver(import.meta.url)
     addPlugins(resolver)
