@@ -12,9 +12,11 @@ export function useSizes(): {
     scroll: import("vue").Ref<{
         top: number;
         left: number;
+        direction: number;
     }, {
         top: number;
         left: number;
+        direction: number;
     }>;
     observe: (el: any, fn: any) => void;
     mw: (size: any) => number;

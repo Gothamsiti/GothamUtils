@@ -15,7 +15,7 @@ export const useSizes = () => {
   }
 
   const sizes = useState('sizes', () => ({ width: 0, height: 0, fr: 0 }))
-  const scroll = useState('scroll', () => ({ top: 0, left: 0 }))
+  const scroll = useState('scroll', () => ({ top: 0, left: 0, direction: 0 }))
 
   const resizeListener = () => {
     reference.value = reference.value ?? window
@@ -30,7 +30,7 @@ export const useSizes = () => {
   const scrollListener = () => {
     const top = reference.value.scrollY !== undefined ? reference.value.scrollY : reference.value.scrollTop
     const left = reference.value.scrollY !== undefined ? reference.value.scrollX : reference.value.scrollLeft
-
+    scroll.value.direction = top > scroll.value.top ? 1 : -1
     scroll.value.top = top
     scroll.value.left = left
   }
