@@ -1,4 +1,4 @@
-import { initMwResponsive } from '~/utils/mwResponsive'
+import { initMwResponsive } from '../utils/mwResponsive'
 
 export default defineNuxtPlugin(() => {
   initMwResponsive()
