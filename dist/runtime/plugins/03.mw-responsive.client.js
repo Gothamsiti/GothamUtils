@@ -1,4 +1,4 @@
-import { initMwResponsive } from "~/utils/mwResponsive";
+import { initMwResponsive } from "../utils/mwResponsive.js";
 export default defineNuxtPlugin(() => {
   initMwResponsive();
   function setViewportUnits() {
