@@ -33,6 +33,21 @@ function getStyleElement() {
   return styleElement
 }
 
+let renderScheduled = false
+
+function scheduleRender() {
+  if (renderScheduled || typeof window === 'undefined') {
+    return
+  }
+
+  renderScheduled = true
+
+  queueMicrotask(() => {
+    renderScheduled = false
+    renderRules()
+  })
+}
+
 function renderRules() {
   const style = getStyleElement()
 
@@ -74,9 +89,7 @@ export function registerMwResponsiveRule(
 
   rules.set(key, rule)
 
-  if (typeof window !== 'undefined') {
-    renderRules()
-  }
+  scheduleRender()
 }
 
 export function registerMwResponsiveRules(
@@ -96,11 +109,8 @@ export function registerMwResponsiveRules(
     changed = true
   }
 
-  if (
-    changed
-    && typeof window !== 'undefined'
-  ) {
-    renderRules()
+  if (changed) {
+    scheduleRender()
   }
 }
 

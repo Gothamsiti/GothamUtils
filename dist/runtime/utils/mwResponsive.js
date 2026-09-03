@@ -19,6 +19,17 @@ function getStyleElement() {
   }
   return styleElement;
 }
+let renderScheduled = false;
+function scheduleRender() {
+  if (renderScheduled || typeof window === "undefined") {
+    return;
+  }
+  renderScheduled = true;
+  queueMicrotask(() => {
+    renderScheduled = false;
+    renderRules();
+  });
+}
 function renderRules() {
   const style = getStyleElement();
   if (!style) {
@@ -48,9 +59,7 @@ export function registerMwResponsiveRule(rule) {
     return;
   }
   rules.set(key, rule);
-  if (typeof window !== "undefined") {
-    renderRules();
-  }
+  scheduleRender();
 }
 export function registerMwResponsiveRules(newRules) {
   let changed = false;
@@ -62,8 +71,8 @@ export function registerMwResponsiveRules(newRules) {
     rules.set(key, rule);
     changed = true;
   }
-  if (changed && typeof window !== "undefined") {
-    renderRules();
+  if (changed) {
+    scheduleRender();
   }
 }
 export function initMwResponsive() {
