@@ -12,6 +12,8 @@ const FLEX_RE = new RegExp(`^flex-(${NUMBER})$`)
 
 const FLEX_DIRECTION_RE = /^flex-(row|column|row-reverse|column-reverse)$/
 
+const AUTO_RE = /^(flex|width|height)-auto$/
+
 const GAP_RE = new RegExp(`^gap-(${NUMBER})$`)
 
 const MAX_WIDTH_RE = new RegExp(`^max-width-(${NUMBER})$`)
@@ -174,6 +176,20 @@ function parseToken(
       value,
       className: `has-flex-${value}`,
       property: 'flex-direction',
+      type: 'literal',
+    }
+  }
+
+  const auto = token.match(AUTO_RE)
+
+  if (auto) {
+    const [, prop = ''] = auto
+
+    return {
+      variable: '',
+      value: prop === 'flex' ? '0 0 auto' : 'auto',
+      className: `has-${prop}-auto`,
+      property: prop,
       type: 'literal',
     }
   }
