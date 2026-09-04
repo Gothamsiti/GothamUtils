@@ -1,3 +1,4 @@
+import { defineNuxtPlugin } from "#app";
 import { initMwResponsive } from "../utils/mwResponsive.js";
 export default defineNuxtPlugin(() => {
   initMwResponsive();
