@@ -10,6 +10,8 @@ const ZINDEX_RE = new RegExp(`^z-index-(${NUMBER})$`)
 
 const FLEX_RE = new RegExp(`^flex-(${NUMBER})$`)
 
+const FLEX_DIRECTION_RE = /^flex-(row|column|row-reverse|column-reverse)$/
+
 const GAP_RE = new RegExp(`^gap-(${NUMBER})$`)
 
 const MAX_WIDTH_RE = new RegExp(`^max-width-(${NUMBER})$`)
@@ -159,6 +161,20 @@ function parseToken(
       className: 'has-flex',
       property: 'flex',
       type: 'mw',
+    }
+  }
+
+  const flexDirection = token.match(FLEX_DIRECTION_RE)
+
+  if (flexDirection) {
+    const [, value = ''] = flexDirection
+
+    return {
+      variable: '',
+      value,
+      className: `has-flex-${value}`,
+      property: 'flex-direction',
+      type: 'literal',
     }
   }
 
@@ -328,8 +344,12 @@ export function useMwClass(
       = parseToken(token)
 
     if (parsed) {
-      style[parsed.variable]
-        = parsed.value
+      if (parsed.variable) {
+        style[parsed.variable] = parsed.value
+      }
+      else if (parsed.type === 'literal') {
+        style[parsed.property] = parsed.value
+      }
 
       classes.push(
         parsed.className,
