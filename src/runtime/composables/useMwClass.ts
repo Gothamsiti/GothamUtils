@@ -18,6 +18,8 @@ const GAP_RE = new RegExp(`^gap-(${NUMBER})$`)
 
 const MAX_WIDTH_RE = new RegExp(`^max-width-(${NUMBER})$`)
 
+const FONT_SIZE_RE = new RegExp(`^font-size-(${NUMBER})$`)
+
 const RESPONSIVE_RE = new RegExp(`^(${NUMBER})-(.+)$`)
 
 const SIDE_ALIASES: Record<string, string> = {
@@ -219,6 +221,20 @@ function parseToken(
       value,
       className: 'has-max-width',
       property: 'max-width',
+      type: 'px',
+    }
+  }
+
+  const fontSize = token.match(FONT_SIZE_RE)
+
+  if (fontSize) {
+    const [, value = ''] = fontSize
+
+    return {
+      variable: '--font-size',
+      value,
+      className: 'has-font-size',
+      property: 'font-size',
       type: 'px',
     }
   }
