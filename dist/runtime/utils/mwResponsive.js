@@ -101,6 +101,14 @@ export function initMwResponsive() {
   if (typeof window === "undefined") {
     return;
   }
+  const ssrRules = useState(
+    MW_RESPONSIVE_STATE_KEY,
+    () => []
+  );
+  for (const rule of ssrRules.value) {
+    const key = `${rule.breakpoint}:${rule.className}`;
+    clientRules.set(key, rule);
+  }
   getStyleElement();
   renderRules();
 }

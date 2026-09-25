@@ -154,6 +154,16 @@ export function initMwResponsive() {
     return
   }
 
+  const ssrRules = useState<MwResponsiveRule[]>(
+    MW_RESPONSIVE_STATE_KEY,
+    () => [],
+  )
+
+  for (const rule of ssrRules.value) {
+    const key = `${rule.breakpoint}:${rule.className}`
+    clientRules.set(key, rule)
+  }
+
   getStyleElement()
   renderRules()
 }
