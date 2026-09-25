@@ -9,6 +9,7 @@ const AUTO_RE = /^(flex|width|height)-auto$/;
 const GAP_RE = new RegExp(`^gap-(${NUMBER})$`);
 const MAX_WIDTH_RE = new RegExp(`^max-width-(${NUMBER})$`);
 const FONT_SIZE_RE = new RegExp(`^font-size-(${NUMBER})$`);
+const TOP_RE = new RegExp(`^top-(${NUMBER})$`);
 const RESPONSIVE_RE = new RegExp(`^(${NUMBER})-(.+)$`);
 const SIDE_ALIASES = {
   top: "t",
@@ -161,6 +162,17 @@ function parseToken(token) {
       className: "has-font-size",
       property: "font-size",
       type: "px"
+    };
+  }
+  const top = token.match(TOP_RE);
+  if (top) {
+    const [, value = ""] = top;
+    return {
+      variable: "--top",
+      value,
+      className: "has-top",
+      property: "top",
+      type: "mw"
     };
   }
   const borderNone = token.match(BORDER_NONE_RE);
