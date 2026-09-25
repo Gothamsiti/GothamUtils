@@ -33,6 +33,8 @@ const BORDER_NONE_RE = /^border-(top|right|bottom|left)-none$/
 
 const FLEX_GROWN_RE = /^flex-grown$/
 
+const STICKY_RE = /^sticky$/
+
 const NO_STICKY_RE = /^no-sticky$/
 
 type ClassField
@@ -265,6 +267,18 @@ function parseToken(
       value: '1',
       className: 'has-flex-grown',
       property: 'flex',
+      type: 'literal',
+    }
+  }
+
+  const sticky = token.match(STICKY_RE)
+
+  if (sticky) {
+    return {
+      variable: '',
+      value: 'sticky',
+      className: 'has-sticky',
+      property: 'position',
       type: 'literal',
     }
   }
