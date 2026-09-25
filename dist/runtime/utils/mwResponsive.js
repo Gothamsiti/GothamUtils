@@ -45,7 +45,7 @@ export function renderMwResponsiveRules(rules) {
   );
   return sortedRules.map((rule) => [
     `@media screen and (max-width: ${rule.breakpoint}px) {`,
-    `	.${rule.className} {`,
+    `	.${rule.className}.${rule.className} {`,
     `		${rule.css}`,
     `	}`,
     `}`

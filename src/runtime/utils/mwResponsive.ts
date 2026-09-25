@@ -70,7 +70,7 @@ export function renderMwResponsiveRules(
   return sortedRules
     .map(rule => [
       `@media screen and (max-width: ${rule.breakpoint}px) {`,
-      `\t.${rule.className} {`,
+      `\t.${rule.className}.${rule.className} {`,
       `\t\t${rule.css}`,
       `\t}`,
       `}`,
