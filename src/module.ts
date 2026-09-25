@@ -17,6 +17,7 @@ export interface ModuleOptions {
 const addPlugins = (resolver: Resolver) => {
   addPlugin(resolver.resolve('./runtime/plugins/01.setupLanguages'))
   addPlugin(resolver.resolve('./runtime/plugins/02.utils'))
+  addPlugin(resolver.resolve('./runtime/plugins/03.mw-responsive.server'))
   addPlugin(resolver.resolve('./runtime/plugins/03.mw-responsive.client'))
 }
 

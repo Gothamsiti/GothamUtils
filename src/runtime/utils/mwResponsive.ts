@@ -1,10 +1,14 @@
+import { useState } from '#imports'
+
 export type MwResponsiveRule = {
   breakpoint: number
   className: string
   css: string
 }
 
-const rules = new Map<string, MwResponsiveRule>()
+export const MW_RESPONSIVE_STATE_KEY = 'gothamutils:mw-responsive-rules'
+
+const clientRules = new Map<string, MwResponsiveRule>()
 
 let styleElement: HTMLStyleElement | null = null
 
@@ -48,14 +52,10 @@ function scheduleRender() {
   })
 }
 
-function renderRules() {
-  const style = getStyleElement()
-
-  if (!style) {
-    return
-  }
-
-  const sortedRules = [...rules.values()].sort(
+export function renderMwResponsiveRules(
+  rules: MwResponsiveRule[],
+) {
+  const sortedRules = [...rules].sort(
     (a, b) => {
       if (a.breakpoint !== b.breakpoint) {
         return b.breakpoint - a.breakpoint
@@ -67,7 +67,7 @@ function renderRules() {
     },
   )
 
-  style.textContent = sortedRules
+  return sortedRules
     .map(rule => [
       `@media screen and (max-width: ${rule.breakpoint}px) {`,
       `\t.${rule.className} {`,
@@ -77,17 +77,46 @@ function renderRules() {
     ].join('\n')).join('\n')
 }
 
+function renderRules() {
+  const style = getStyleElement()
+
+  if (!style) {
+    return
+  }
+
+  style.textContent = renderMwResponsiveRules(
+    [...clientRules.values()],
+  )
+}
+
 export function registerMwResponsiveRule(
   rule: MwResponsiveRule,
 ) {
   const key
     = `${rule.breakpoint}:${rule.className}`
 
-  if (rules.has(key)) {
+  if (import.meta.server) {
+    const rules = useState<MwResponsiveRule[]>(
+      MW_RESPONSIVE_STATE_KEY,
+      () => [],
+    )
+
+    if (rules.value.some(existing => (
+      `${existing.breakpoint}:${existing.className}` === key
+    ))) {
+      return
+    }
+
+    rules.value = [...rules.value, rule]
+
     return
   }
 
-  rules.set(key, rule)
+  if (clientRules.has(key)) {
+    return
+  }
+
+  clientRules.set(key, rule)
 
   scheduleRender()
 }
@@ -95,17 +124,23 @@ export function registerMwResponsiveRule(
 export function registerMwResponsiveRules(
   newRules: MwResponsiveRule[],
 ) {
+  if (import.meta.server) {
+    newRules.forEach(registerMwResponsiveRule)
+
+    return
+  }
+
   let changed = false
 
   for (const rule of newRules) {
     const key
       = `${rule.breakpoint}:${rule.className}`
 
-    if (rules.has(key)) {
+    if (clientRules.has(key)) {
       continue
     }
 
-    rules.set(key, rule)
+    clientRules.set(key, rule)
     changed = true
   }
 

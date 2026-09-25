@@ -11,5 +11,8 @@ describe('ssr', async () => {
     // Get response to a server-rendered page with `$fetch`.
     const html = await $fetch('/')
     expect(html).toContain('<div>basic</div>')
+    expect(html).toContain('data-mw-responsive')
+    expect(html).toContain('@media screen and (max-width: 980px)')
+    expect(html).toContain('.has-980-height')
   })
 })
