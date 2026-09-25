@@ -1,0 +1,9 @@
+{
+  "name": "gothamutils",
+  "configKey": "gothamutils",
+  "version": "1.0.73",
+  "builder": {
+    "@nuxt/module-builder": "1.0.3",
+    "unbuild": "unknown"
+  }
+}
