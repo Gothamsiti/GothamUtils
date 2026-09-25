@@ -31,6 +31,10 @@ const SIDE_ALIASES: Record<string, string> = {
 
 const BORDER_NONE_RE = /^border-(top|right|bottom|left)-none$/
 
+const FLEX_GROWN_RE = /^flex-grown$/
+
+const NO_STICKY_RE = /^no-sticky$/
+
 type ClassField
   = | string
     | string[]
@@ -249,6 +253,30 @@ function parseToken(
       value: 'none',
       className: `border-${direction}-none`,
       property: `border-${direction}`,
+      type: 'literal',
+    }
+  }
+
+  const flexGrown = token.match(FLEX_GROWN_RE)
+
+  if (flexGrown) {
+    return {
+      variable: '',
+      value: '1',
+      className: 'has-flex-grown',
+      property: 'flex',
+      type: 'literal',
+    }
+  }
+
+  const noSticky = token.match(NO_STICKY_RE)
+
+  if (noSticky) {
+    return {
+      variable: '',
+      value: 'static',
+      className: 'has-no-sticky',
+      property: 'position',
       type: 'literal',
     }
   }
