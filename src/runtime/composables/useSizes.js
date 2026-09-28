@@ -1,4 +1,6 @@
-import { useState, watch } from '#imports'
+import { effectScope, useState, watch } from '#imports'
+
+let referenceWatched = false
 
 export const useSizes = () => {
   const gridCount = 80
@@ -35,9 +37,17 @@ export const useSizes = () => {
     scroll.value.left = left
   }
 
-  watch(reference, () => {
-    resizeListener()
-  })
+  // un solo watcher per app: registrato a ogni chiamata ne creava uno per componente,
+  // e a ogni cambio di reference resizeListener girava N volte. Lo scope staccato evita
+  // che venga fermato all'unmount del primo componente che ha chiamato useSizes
+  if (import.meta.client && !referenceWatched) {
+    referenceWatched = true
+    effectScope(true).run(() => {
+      watch(reference, () => {
+        resizeListener()
+      })
+    })
+  }
 
   // scroll e resize arrivano anche più volte per frame: si aggiorna lo stato al massimo una volta per frame,
   // così chi dipende da `sizes` e `scroll` (header, watcher) non ricalcola a ogni evento
