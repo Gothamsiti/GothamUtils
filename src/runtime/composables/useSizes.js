@@ -39,11 +39,24 @@ export const useSizes = () => {
     resizeListener()
   })
 
+  // scroll e resize arrivano anche più volte per frame: si aggiorna lo stato al massimo una volta per frame,
+  // così chi dipende da `sizes` e `scroll` (header, watcher) non ricalcola a ogni evento
+  const perFrame = (fn) => {
+    let frame = 0
+    return () => {
+      if (frame) return
+      frame = requestAnimationFrame(() => {
+        frame = 0
+        fn()
+      })
+    }
+  }
+
   const init = () => {
     if (import.meta.client) {
       resizeListener()
-      window.addEventListener('resize', resizeListener)
-      window.addEventListener('scroll', scrollListener)
+      window.addEventListener('resize', perFrame(resizeListener), { passive: true })
+      window.addEventListener('scroll', perFrame(scrollListener), { passive: true })
     }
   }
 
