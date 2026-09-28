@@ -1,3 +1,4 @@
+import { computed, reactive, shallowRef, watch } from '#imports'
 import { registerMwResponsiveRule } from '../utils/mwResponsive'
 
 const NUMBER = '\\d+(?:\\.\\d+)?|\\.\\d+'
@@ -355,14 +356,36 @@ function getResponsiveCss(
   }
 }
 
+/**
+ * Con un getter il risultato è reattivo: nell'editor Storyblok le classi seguono le modifiche al blok.
+ * `mw.classes` e `mw.style` restano leggibili come prima (reactive apre i computed).
+ * Il primo parse avviene nel setup, così in SSR le regole responsive finiscono nel payload come sempre;
+ * i ricalcoli successivi avvengono solo sul client.
+ */
 export function useMwClass(
   source: MaybeGetter,
 ) {
-  const classField
-    = typeof source === 'function'
-      ? source()
-      : source
+  if (typeof source !== 'function') {
+    return parseMwClass(source)
+  }
 
+  const parsed = shallowRef(parseMwClass(source()))
+
+  if (import.meta.client) {
+    watch(source, (classField) => {
+      parsed.value = parseMwClass(classField)
+    })
+  }
+
+  return reactive({
+    classes: computed(() => parsed.value.classes),
+    style: computed(() => parsed.value.style),
+  })
+}
+
+function parseMwClass(
+  classField: ClassField,
+) {
   const tokens = (
     Array.isArray(classField)
       ? classField.join(' ')

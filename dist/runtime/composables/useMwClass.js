@@ -1,3 +1,4 @@
+import { computed, reactive, shallowRef, watch } from "#imports";
 import { registerMwResponsiveRule } from "../utils/mwResponsive.js";
 const NUMBER = "\\d+(?:\\.\\d+)?|\\.\\d+";
 const SIDE_RE = new RegExp(`^(padding|margin)-(top|right|bottom|left|[trblxy])-(${NUMBER})$`);
@@ -256,7 +257,21 @@ function getResponsiveCss(parsed, variable) {
   }
 }
 export function useMwClass(source) {
-  const classField = typeof source === "function" ? source() : source;
+  if (typeof source !== "function") {
+    return parseMwClass(source);
+  }
+  const parsed = shallowRef(parseMwClass(source()));
+  if (import.meta.client) {
+    watch(source, (classField) => {
+      parsed.value = parseMwClass(classField);
+    });
+  }
+  return reactive({
+    classes: computed(() => parsed.value.classes),
+    style: computed(() => parsed.value.style)
+  });
+}
+function parseMwClass(classField) {
   const tokens = (Array.isArray(classField) ? classField.join(" ") : classField ?? "").split(/\s+/).filter(Boolean);
   const style = {};
   const classes = [];
